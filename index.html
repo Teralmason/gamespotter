@@ -9,18 +9,14 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     /* CSS kısmı aynen kalabilir */
-    body {
+   body {
   font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #4e0583, #b17900, #1a1a1a);
-  background-size: 1000% 200%;
-  animation: gradientMove 10s ease infinite;
+  background: linear-gradient(135deg, #800080, #ff7300);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-    @keyframes gradientMove {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
     .gradient-button {
       background: linear-gradient(45deg, #ff7300, #800080, #000000);
       background-size: 300% 300%;
@@ -89,7 +85,7 @@
 
   <!-- Favori toggle butonu -->
   <button id="favoriteToggleBtn" class="fixed top-4 left-4 z-20 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded shadow-md transition">
-    ⭐ Favoriler
+    ⭐ Favorites
   </button>
 
   <section class="max-w-5xl mx-auto grid lg:grid-cols-5 sm:grid-cols-2 gap-4 mb-8">
@@ -98,17 +94,18 @@
       <select id="genreSelect" class="w-full p-2 rounded bg-gray-800 text-white">
         <option value="">Any</option>
         <option value="action">Action</option>
-        <option value="rpg">RPG</option>
-        <option value="horror">Horror</option>
         <option value="strategy">Strategy</option>
         <option value="simulation">Simulation</option>
         <option value="adventure">Adventure</option>
         <option value="puzzle">Puzzle</option>
         <option value="sports">Sports</option>
         <option value="racing">Racing</option>
-        <option value="mmorpg">MMORPG</option>
         <option value="platformer">Platformer</option>
-        <option value="stealth">Stealth</option>
+        <option value="indie">Indie</option>
+        <option value="card">Card</option>
+        <option value="casual">Casual</option>
+        <option value="shooter">Shooter</option>
+        <option value="fighting">Fighting</option>
       </select>
     </div>
 
@@ -158,12 +155,42 @@
       </select>
     </div>
   </section>
-
-  <div class="text-center mb-10">
+<div class="text-center mb-10">
     <button id="findGameBtn" class="gradient-button px-6 py-3 rounded text-lg font-semibold">
       🔍 Find Game
     </button>
   </div>
+<div id="gamesContainer" class="grid grid-cols-3 gap-6">
+  <div class="game-card p-4 border rounded shadow">
+    <h3>Game 1</h3>
+    <p>Some info about game 1</p>
+  </div>
+  <div class="game-card p-4 border rounded shadow">
+    <h3>Game 2</h3>
+    <p>Some info about game 2</p>
+  </div>
+  <div class="game-card p-4 border rounded shadow">
+    <h3>Game 3</h3>
+    <p>Some info about game 3</p>
+  </div>
+  <!-- Daha fazla kart... -->
+</div>
+
+<script>
+  document.getElementById("randomBtn").addEventListener("click", () => {
+    const cards = document.querySelectorAll(".game-card");
+    const randomIndex = Math.floor(Math.random() * cards.length);
+
+    cards.forEach((card, index) => {
+      if(index === randomIndex){
+        card.style.display = "block";  // Seçilen kart gösterilir
+      } else {
+        card.style.display = "none";   // Diğer kartlar gizlenir
+      }
+    });
+  });
+</script>
+
 
   <section id="gamesContainer" class="max-w-6xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></section>
 
@@ -360,7 +387,7 @@
           });
           currentPage++;
         } else if (clear) {
-          gamesContainer.innerHTML = "<p class='text-center text-gray-300 col-span-full'>Oyun bulunamadı.</p>";
+          gamesContainer.innerHTML = "<p class='text-center text-gray-300 col-span-full'>Can't find any game.</p>";
         }
       } catch {
         if (clear) {
@@ -408,7 +435,7 @@
         gamesContainer.innerHTML = "";
 
         if (favs.length === 0) {
-          gamesContainer.innerHTML = "<p class='text-center text-gray-300 col-span-full'>Favori oyunun yok.</p>";
+          gamesContainer.innerHTML = "<p class='text-center text-gray-300 col-span-full'>You didn't favorite any game yet.</p>";
           return;
         }
 
@@ -418,11 +445,11 @@
             games.forEach(game => gamesContainer.appendChild(createGameCard(game)));
           })
           .catch(() => {
-            gamesContainer.innerHTML = "<p class='text-center text-gray-300 col-span-full'>Favori oyunları yüklerken hata oluştu.</p>";
+            gamesContainer.innerHTML = "<p class='text-center text-gray-300 col-span-full'>An error occured while loading favorite games.</p>";
           });
 
       } else {
-        favoriteToggleBtn.textContent = "⭐ Favoriler";
+        favoriteToggleBtn.textContent = "⭐ Favorites";
         loadAndDisplayGames(true);
       }
     });
